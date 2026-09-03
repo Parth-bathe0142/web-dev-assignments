@@ -1,0 +1,10 @@
+<div
+    class="forum-list"
+    x-data="{ selected: null }"
+>
+    {% for forum in forums %}
+        {% include "forum/forum_item.html" with forum=forum %}
+    {% empty %}
+        <p>No forums have been created yet.</p>
+    {% endfor %}
+</div>

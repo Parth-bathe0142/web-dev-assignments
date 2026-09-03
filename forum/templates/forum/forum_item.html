@@ -1,0 +1,15 @@
+<button
+    type="button"
+    id="forum-{{ forum.id }}"
+    class="forum-item"
+
+    :class="{ 'selected': selectedForum === {{ forum.id }} }"
+
+    @click="selectedForum = {{ forum.id }}"
+
+    hx-get="{% url 'forum-detail' forum.id %}"
+    hx-target="#post-list"
+    hx-swap="innerHTML"
+>
+    {{ forum.name }}
+</button>

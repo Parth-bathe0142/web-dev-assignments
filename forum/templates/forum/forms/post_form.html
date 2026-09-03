@@ -1,0 +1,52 @@
+{% extends "forum/forms/modal.html" %}
+
+{% block form %}
+
+<form
+    method="post"
+    action="{% url 'create-post' forum.id %}"
+    hx-post="{% url 'create-post' forum.id %}"
+    hx-target="#post-list"
+    hx-swap="innerHTML"
+
+    @htmx:after-request="
+        if ($event.detail.successful) {
+            $dispatch('close-modal', 'post')
+        }
+    "
+>
+    {% csrf_token %}
+
+    <h3>New Post</h3>
+
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+        <div class="form-field">
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                <small class="error">
+                    {{ error }}
+                </small>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="modal-actions">
+        <button type="submit" @click="$dispatch('close-modal', 'post')">
+            Post
+        </button>
+
+        <button
+            type="button"
+            @click="$dispatch('close-modal', 'post')"
+        >
+            Cancel
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}

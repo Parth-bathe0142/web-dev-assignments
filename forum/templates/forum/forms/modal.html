@@ -1,0 +1,32 @@
+<div
+    x-data="{ open: {% if open_on_load %}true{% else %}false{% endif %} }"
+
+    @open-modal.window="
+        if ($event.detail === '{{ modal_name }}') {
+            open = true
+        }
+    "
+
+    @close-modal.window="
+        if ($event.detail === '{{ modal_name }}') {
+            open = false
+        }
+    "
+
+    x-show="open"
+    x-cloak
+    class="modal"
+>
+    <div
+        class="modal-backdrop"
+        @click="open = false"
+    ></div>
+
+    <div
+        class="modal-content"
+        @click.stop
+    >
+        {% block form %}
+        {% endblock %}
+    </div>
+</div>

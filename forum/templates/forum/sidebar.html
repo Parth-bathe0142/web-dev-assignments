@@ -1,0 +1,19 @@
+<div id="sidebar">
+    {% if user.is_authenticated %}
+        <div class="user-login">
+            <span>{{ user.username }}</span>
+            <form
+                method="post"
+                action="{% url 'logout' %}"
+            >
+                {% csrf_token %}
+
+                <button type="submit">
+                    Logout
+                </button>
+            </form>
+        </div>
+    {% else %}
+        {% include "forum/auth_form.html" %}
+    {% endif %}
+</div>

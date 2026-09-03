@@ -1,0 +1,126 @@
+<div
+    x-data="{ open: false }"
+
+    @open-forum-form.window="open = true"
+    @open-post-form.window="open = true"
+
+    @close-forum-form.window="open = false"
+    @close-post-form.window="open = false"
+
+    x-show="open"
+    x-cloak
+
+    class="modal"
+>
+    <div
+        class="modal-backdrop"
+        @click="open = false"
+    />
+    <div
+        class="modal-content"
+        @click.stop
+    >
+        {% if form_type == "forum" %}
+            <form
+                method="post"
+                action="{% url 'create-forum' %}"
+
+                hx-post="{% url 'create-forum' %}"
+                hx-target="#forum-list"
+                hx-swap="innerHTML"
+
+                @htmx:after-request="
+                    if ($event.detail.successful) {
+                        open = false
+                    }
+                "
+            >
+                {% csrf_token %}
+                <h3>Create Forum</h3>
+
+                {{ form.non_field_errors }}
+
+                {% for field in form %}
+                    <div class="form-field">
+
+                        {{ field.label_tag }}
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <small class="error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+
+                    </div>
+                {% endfor %}
+
+                <div class="modal-actions">
+                    <button type="submit">
+                        Create
+                    </button>
+
+                    <button
+                        type="button"
+                        @click="open = false"
+                    >
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+
+        {% elif form_type == "post" %}
+
+            <form
+                method="post"
+                action="{% url 'create-post' %}"
+
+                hx-post="{% url 'create-post' %}"
+                hx-target="#post-list"
+                hx-swap="innerHTML"
+
+                @htmx:after-request="
+                    if ($event.detail.successful) {
+                        open = false
+                    }
+                "
+            >
+                {% csrf_token %}
+
+                <h3>New Post</h3>
+
+                {{ form.non_field_errors }}
+
+                {% for field in form %}
+                    <div class="form-field">
+
+                        {{ field.label_tag }}
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <small class="error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+
+                    </div>
+                {% endfor %}
+
+                <div class="modal-actions">
+                    <button type="submit">
+                        Post
+                    </button>
+
+                    <button
+                        type="button"
+                        @click="open = false"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<div
+    x-data="{ mode: 'login' }"
+    class="user-login"
+>
+    <!-- Login -->
+    <form
+        x-show="mode === 'login'"
+        method="post"
+        action="{% url 'login' %}"
+    >
+        {% csrf_token %}
+        <h3>Login</h3>
+        
+        {{ login_form.non_field_errors }}
+        
+        {% for field in login_form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+
+                {% for error in field.errors %}
+                    <small class="error">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">
+            Login
+        </button>
+        <button
+            type="button"
+            @click="mode = 'signup'"
+        >
+            Signup
+        </button>
+    </form>
+
+    <!-- Signup -->
+    <form
+        x-show="mode === 'signup'"
+        x-cloak
+        method="post"
+        action="{% url 'signup' %}"
+    >
+        {% csrf_token %}
+        <h3>Signup</h3>
+
+        {{ signup_form.non_field_errors }}
+
+        {% for field in signup_form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+
+                {% for error in field.errors %}
+                    <small class="error">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">
+            Signup
+        </button>
+        <button
+            type="button"
+            @click="mode = 'login'"
+        >
+            Back to Login
+        </button>
+    </form>
+</div>

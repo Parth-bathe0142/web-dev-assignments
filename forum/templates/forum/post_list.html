@@ -1,0 +1,7 @@
+<div class="post-list">
+    {% for post in posts %}
+        {% include "forum/post_item.html" with post=post %}
+    {% empty %}
+        <p>No posts in this forum yet.</p>
+    {% endfor %}
+</div>

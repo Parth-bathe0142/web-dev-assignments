@@ -1,0 +1,53 @@
+{% extends "forum/base.html" %}
+
+{% block title %}Home | My Forum{% endblock %}
+
+{% block content %}
+<div id="main-content" x-data="{ selectedForum: null }">
+    <section class="forum-section">
+        <h2>
+            Active forums:
+            <button
+                type="button"
+                @click="$dispatch('open-modal', 'forum')"
+            >
+                +
+            </button>
+        </h2>
+        <div
+            id="forum-list"
+            hx-get="{% url 'forum-list' %}"
+            hx-trigger="load"
+            hx-swap="innerHTML"
+        >
+            Loading forums...
+        </div>
+    </section>
+    <section class="post-section">
+        <h2>
+            Posts:
+            <button
+                type="button"
+                :disabled="!$store.auth.loggedin || selectedForum === null"
+                @click="
+                    htmx.ajax(
+                        'GET',
+                        `/forums/${selectedForum}/posts/create-form/`,
+                        {
+                            target: '#modal-container',
+                            swap: 'innerHTML'
+                        }
+                    )
+                "
+            >
+                +
+            </button>
+        </h2>
+        <div id="post-list">
+            <p>Select a forum to view its posts.</p>
+        </div>
+    </section>
+    {% include "forum/forms/forum_form.html" with modal_name="forum" form=forum_form %}
+    <div id="modal-container"></div>
+</div>
+{% endblock %}
